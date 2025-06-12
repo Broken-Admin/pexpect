@@ -34,9 +34,13 @@ class REPLWrapper(object):
                  new_prompt=PEXPECT_PROMPT,
                  continuation_prompt=PEXPECT_CONTINUATION_PROMPT,
                  extra_init_cmd=None):
+        # Is cmd_or_spawn of the basestring (str) type?
         if isinstance(cmd_or_spawn, basestring):
+            # If it is, use the string as a spawn command
             self.child = pexpect.spawn(cmd_or_spawn, echo=False, encoding='utf-8', env={'NO_COLOR': '1'})
         else:
+            # Otherwise assume it is a child process
+            # and assign it
             self.child = cmd_or_spawn
         if self.child.echo:
             # Existing spawn instance has echo enabled, disable it
@@ -44,6 +48,9 @@ class REPLWrapper(object):
             self.child.setecho(False)
             self.child.waitnoecho()
 
+        # Check if the user has provided
+        # a separate prompt to expect
+        # in the spawn output
         if prompt_change is None:
             self.prompt = orig_prompt
         else:
