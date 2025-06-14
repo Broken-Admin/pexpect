@@ -87,13 +87,13 @@ class REPLWrapTestCase(unittest.TestCase):
         self.assertEqual(res.strip().splitlines(), ['1 2', '3 4'])
 
     def test_existing_spawn(self):
-        child = pexpect.spawn("bash", timeout=5, encoding='utf-8')
+        child = pexpect.spawn("bash", timeout=5, encoding='utf-8', env={'NO_COLOR': '1'})
         repl = replwrap.REPLWrapper(child, re.compile('[$#]'),
                                     "PS1='{0}' PS2='{1}' "
                                     "PROMPT_COMMAND=''")
 
         print(repl)
-        res = repl.run_command("echo $HOME")
+        res = repl.run_command("pwd")
         print(res)
         assert res.startswith('/'), res
 
